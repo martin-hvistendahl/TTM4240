@@ -1,0 +1,11 @@
+int eth0
+ip address 10.10.0.1/24
+
+int eth1
+ip address 10.17.0.3/24
+
+int eth2
+ip address 10.17.0.4/24
+
+int lo
+ip address 10.17.2.1/24
