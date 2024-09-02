@@ -1,0 +1,19 @@
+conf t
+hostname Level-3
+
+interface lo
+ip address 10.10.1.1/32
+
+interface eth0
+switchport mode trunk
+switchport trunk allowed vlan 2,3
+
+vlan 2
+name NextTel-kobling
+vlan 3
+name TeleStar-kobling
+
+interface vlan 2
+ip address 10.10.0.2/30
+interface vlan 3
+ip address 10.10.0.6/30

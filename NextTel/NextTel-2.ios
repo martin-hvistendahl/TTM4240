@@ -1,0 +1,11 @@
+conf t
+hostname NextTel-2
+
+interface eth0 
+ip address 10.10.0.5/30
+
+interface eth1 
+ip address 10.16.0.2/29
+
+interface lo
+ip address 10.16.2.2/32

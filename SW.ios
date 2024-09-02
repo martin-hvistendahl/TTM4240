@@ -1,0 +1,23 @@
+conf t
+hostname SW
+
+interface eth0
+switchport mode access 
+switchport access vlan 2
+no shut
+
+interface eth1
+switchport mode access
+switchport access vlan 3
+no shut
+
+interface eth2
+!trunk for vlan 2 and 3
+switchport mode trunk
+switchport trunk allowed vlan 2,3
+no shut
+
+vlan 2
+name NextTel-kobling
+vlan 3
+name TeleStar-kobling
