@@ -1,0 +1,18 @@
+conf t
+hostname TeleStar-3
+int eth0
+ip address 10.17.0.5/28
+
+int eth1
+ip address 10.17.1.5/30
+
+int eth2
+ip address 10.17.0.6/28
+
+int lo
+ip address 10.17.2.3/32
+
+! router ospf
+!  network 10.17.0.0/28 area 0
+!  network 10.17.1.4/30 area 0
+!  network 10.17.2.3/32 area 0

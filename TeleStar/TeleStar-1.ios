@@ -1,17 +1,24 @@
-
+conf t
+hostname TeleStar-1
 interface eth0
-ip address 10.17.0.1/24
+ip address 10.17.0.1/28
 
 interface eth1
-ip address 10.17.0.2/24
+ip address 10.17.0.2/28
 
 interface eth2
-ip address 10.17.1.1/24
+ip address 10.17.1.1/30
 
 interface eth3
-ip address 10.17.1.2/24
+ip address 10.16.1.10/30
 
 interface lo
-ip address 10.17.2.1/24
+ip address 10.17.2.1/32
 
 ! make osp setup for ffrrouter
+
+! router ospf
+!  network 10.17.0.0/28 area 0
+!  network 10.17.1.0/30 area 0
+!  network 10.16.1.0/30 area 0
+!  network 10.17.2.1/32 area 0

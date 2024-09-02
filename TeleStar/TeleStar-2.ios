@@ -1,11 +1,18 @@
+conf t
+hostname TeleStar-2
 int eth0
-ip address 10.10.0.1/24
+ip address 10.10.0.1/30
 
 int eth1
-ip address 10.17.0.3/24
+ip address 10.17.0.3/28
 
 int eth2
-ip address 10.17.0.4/24
+ip address 10.17.0.4/28
 
 int lo
-ip address 10.17.2.1/24
+ip address 10.17.2.2/32
+
+! router ospf
+!  network 10.10.0.0/30 area 0
+!  network 10.17.0.0/28 area 0
+!  network 10.17.2.2/32 area 0
