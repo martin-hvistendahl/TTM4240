@@ -1,0 +1,97 @@
+conf termin
+interface fa0/1
+description ***NEXTTEL-1 UPLINK***
+ip address 10.17.1.6 255.255.255.252
+bandwidth 1000
+no shut
+
+router bgp 64498
+neighbor 10.17.1.5 remote 4010
+network 10.0.100.0 mask 255.255.255.128
+network 10.0.80.0 mask 255.255.255.128
+network 10.17.1.4 mask 255.255.255.252
+address-family ipv4
+redistribute connected subnets
+end
+!show ip bgp neighbors 10.17.1.5 advertised-routes
+
+interface fa 0/0
+no shut
+
+interface fa 0/0.10
+description ***KUNDE-B1 PROD***
+encapsulation dot1Q 10
+ip address 10.0.100.1 255.255.255.128
+ip access-group RFC1918 in
+
+interface fa 0/0.40
+description ***KUNDE-B1 TEST***
+encapsulation dot1Q 40
+ip address 10.0.80.1 255.255.255.128
+ip access-group RFC1918 in
+
+! Exclude IP addresses
+ip dhcp excluded-address 10.0.100.1 10.0.100.10
+ip dhcp excluded-address 10.0.80.1 10.0.80.10
+
+! Configure DHCP for VLAN 10
+ip dhcp pool VLAN10
+ network 10.0.100.0 255.255.255.128
+ default-router 10.0.100.1
+ dns-server 8.8.8.8
+ exit
+
+! Configure DHCP for VLAN 40
+ip dhcp pool VLAN40
+ network 10.0.80.0 255.255.255.128
+ default-router 10.0.80.1
+ dns-server 8.8.8.8
+
+ip access-list ext RFC1918
+10 permit ip 10.0.10.0 0.0.0.127 10.0.100.0 0.0.0.127
+20 permit ip 10.0.40.0 0.0.0.127 10.0.80.0 0.0.0.127
+30 deny ip any 10.0.0.0 0.255.255.255
+40 deny ip any 172.16.0.0 0.15.255.255
+50 deny ip any 192.168.0.0 0.0.255.255
+60 permit ip any any
+---------------------------------------------------------------------------------------------------------------------
+hostname ews2
+
+no ip routing
+
+vlan 10
+name Prod
+vlan 40
+name Test
+
+
+
+interface vlan 10
+description ***KUNDE-B1 PROD***
+ip address 10.0.100.2 255.255.255.128
+ip helper-address 10.0.100.1
+no shut
+
+interface vlan 40
+description ***KUNDE-B1 TEST***
+ip address 10.0.80.2 255.255.255.128
+ip helper-address 10.0.80.1
+no shut
+
+interface fa1/0
+description ***KUNDE-B2 UPLINK***
+switchport mode trunk
+no shut
+
+int fa1/1
+description ***TEST VLAN***
+switchport mode access 
+switchport access vlan 10
+no shut
+
+int fa1/9
+description ***PROD VLAN***
+switchport mode access
+switchport access vlan 40
+no shut
+

@@ -1,19 +1,21 @@
 conf t
 hostname Level-3
 
-interface lo
-ip address 10.10.1.1/32
+!set interfaces $type $name address $address
+conf
+set interfaces lo address 10.10.1.1/32
+set interfaces eth0 address 10.10.0.3/29
+    
 
-interface eth0
-switchport mode trunk
-switchport trunk allowed vlan 2,3
 
-vlan 2
-name NextTel-kobling
-vlan 3
-name TeleStar-kobling
+set protocols bgp 3006 
 
-interface vlan 2
-ip address 10.10.0.2/30
-interface vlan 3
-ip address 10.10.0.6/30
+set protocols bgp 3006 neighbor 10.10.0.2 remote-as 20001
+set protocols bgp 3006 neighbor 10.10.0.2 description 'NextTel-2'
+
+set protocols bgp 3006 neighbor 10.10.0.1 remote-as 4010
+set protocols bgp 3006 neighbor 10.10.0.1 description 'TeleStar-2'
+
+set protocols bgp 3006 address-family ipv4-unicast network 10.10.0.0/29
+set protocols bgp 3006 address-family ipv4-unicast redistribute connected
+set protocols static route 0.0.0.0/0 next-hop 0.0.0.0

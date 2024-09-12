@@ -1,24 +1,42 @@
 conf t
-hostname TeleStar-1
 interface eth0
-ip address 10.17.0.1/28
+description ***TELESTAR-3 UPLINK***
+ip address 10.17.0.9/30
+bandwidth 100
 
 interface eth1
-ip address 10.17.0.2/28
+description ***TELESTAR-2 UPLINK***
+ip address 10.17.0.1/30
+bandwidth 1000
 
 interface eth2
+description ***KUNDE-B1 UPLINK***
 ip address 10.17.1.1/30
+bandwidth 1000
 
 interface eth3
+description ***NEXTTEL-1 UPLINK***
 ip address 10.16.1.10/30
+bandwidth 1000
 
 interface lo
+description ***LOOPBACK***
 ip address 10.17.2.1/32
 
-! make osp setup for ffrrouter
+router ospf 
+ospf router-id 10.17.2.1
+network 10.17.0.0/30 area 0
+network 10.17.0.8/30 area 0
+network 10.17.1.0/30 area 0
+network 10.17.2.1/32 area 0
 
-! router ospf
-!  network 10.17.0.0/28 area 0
-!  network 10.17.1.0/30 area 0
-!  network 10.16.1.0/30 area 0
-!  network 10.17.2.1/32 area 0
+router bgp 4010
+neighbor 10.17.1.2 remote-as 64497
+neighbor 10.16.1.9 remote-as 20001
+neighbor 10.17.0.2 remote-as 4010
+neighbor 10.17.0.10 remote-as 4010
+address-family ipv4
+redistribute connected
+redistribute ospf
+end
+

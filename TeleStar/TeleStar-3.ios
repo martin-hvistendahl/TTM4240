@@ -1,18 +1,38 @@
 conf t
 hostname TeleStar-3
 int eth0
-ip address 10.17.0.5/28
+description ***TELESTAR-1 UPLINK***
+ip address 10.17.0.10/30
+bandwidth 100
 
 int eth1
+description ***KUNDE-B2 UPLINK***
 ip address 10.17.1.5/30
+bandwidth 100
 
 int eth2
-ip address 10.17.0.6/28
+description ***TELESTAR-2 UPLINK***
+ip address 10.17.0.6/30
+bandwidth 1000
 
 int lo
+description ***LOOPBACK***
 ip address 10.17.2.3/32
 
-! router ospf
-!  network 10.17.0.0/28 area 0
-!  network 10.17.1.4/30 area 0
-!  network 10.17.2.3/32 area 0
+router ospf 
+ospf router-id 10.17.2.3
+network 10.17.0.4/30 area 0
+network 10.17.0.8/30 area 0
+network 10.17.1.4/30 area 0
+network 10.17.2.3/32 area 0    
+
+router bgp 4010
+neighbor 10.17.1.6 remote-as 64498
+neighbor 10.17.0.9 remote 4010
+neighbor 10.17.0.5 remote 4010
+address-family ipv4
+redistribute connected
+redistribute ospf
+end
+
+

@@ -2,17 +2,36 @@ conf t
 hostname NextTel-1
 
 interface eth0
+description ***KUNDE-A UPLINK***
 ip address 10.16.1.1/30
+bandwidth 1000
 
 interface eth1
-ip address 10.16.0.1/29
+description ***NEXTTEL-2 UPLINK***
+ip address 10.16.0.1/30
+bandwidth 1000
 
 interface eth2
+description ***KUNDE-B1 UPLINK***
 ip address 10.16.1.5/30
+bacndwidth 100
 
 interface eth3
-ip address 10.16.1.5/30
+description ***TELESTAR-1 UPLINK***
+ip address 10.16.1.9/30
+bandwidth 1000
 
 interface lo
+description ***LOOPBACK***
 ip address 10.16.2.1/32
+
+router bgp 20001
+neighbor 10.16.1.2 remote-as 64496
+neighbor 10.16.1.6 remote-as 64497
+neighbor 10.16.1.10 remote-as 4010
+neighbor 10.16.0.2 remote-as 20001
+address-family ipv4
+redistribute connected
+redistribute ospf
+end
 
