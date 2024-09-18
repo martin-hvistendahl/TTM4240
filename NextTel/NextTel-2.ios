@@ -21,5 +21,4 @@ neighbor 10.10.0.1 remote-as 4010
 neighbor 10.16.0.1 remote-as 20001
 address-family ipv4
 redistribute connected
-redistribute ospf
 end

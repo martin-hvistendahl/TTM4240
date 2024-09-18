@@ -30,13 +30,15 @@ network 10.17.0.8/30 area 0
 network 10.17.1.0/30 area 0
 network 10.17.2.1/32 area 0
 
+no router bgp 4010
 router bgp 4010
 neighbor 10.17.1.2 remote-as 64497
 neighbor 10.16.1.9 remote-as 20001
 neighbor 10.17.0.2 remote-as 4010
 neighbor 10.17.0.10 remote-as 4010
 address-family ipv4
-redistribute connected
-redistribute ospf
+network 10.17.1.0 mask 255.255.255.252
+network 10.16.1.8 mask 255.255.255.252
+no redistribute connected
 end
 

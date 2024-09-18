@@ -7,9 +7,9 @@ ip address 10.16.1.2/30
 bandwidth 1000
 
 
-router bgp 64497
+no router bgp 64496
+router bgp 64496
 neighbor 10.16.1.1 remote-as 20001  
-address-family ipv4
+address-family ipv4 unicast
 redistribute connected
-redistribute ospf
 end

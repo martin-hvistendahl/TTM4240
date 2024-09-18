@@ -12,13 +12,19 @@ bandwidth 1000
 no shut
 
 
+no router bgp 64497
 router bgp 64497
 neighbor 10.16.1.5 remote-as 20001
 neighbor 10.17.1.1 remote 4010
-no neighbor 10.0.100.1 remote 64498
+
+address-family ipv4 unicast
+no redistribute connected
 network 10.0.10.0 mask 255.255.255.128
-address-family ipv4
-redistribute connected
+network 10.0.40.0 mask 255.255.255.128
+network 10.17.1.0 mask 255.255.255.252
+network 10.16.1.4 mask 255.255.255.252
+ no auto-summary
+ no synchronization
 end
 
 interface fa 0/1

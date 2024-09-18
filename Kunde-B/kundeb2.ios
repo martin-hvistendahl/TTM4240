@@ -7,11 +7,12 @@ no shut
 
 router bgp 64498
 neighbor 10.17.1.5 remote 4010
-network 10.0.100.0 mask 255.255.255.128
 network 10.0.80.0 mask 255.255.255.128
-network 10.17.1.4 mask 255.255.255.252
+network 10.0.100.0 mask 255.255.255.128
 address-family ipv4
-redistribute connected subnets
+redistribute connected
+ no auto-summary
+ no synchronization
 end
 !show ip bgp neighbors 10.17.1.5 advertised-routes
 

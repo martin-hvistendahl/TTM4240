@@ -14,7 +14,7 @@ bandwidth 1000
 interface eth2
 description ***KUNDE-B1 UPLINK***
 ip address 10.16.1.5/30
-bacndwidth 100
+bandwidth 100
 
 interface eth3
 description ***TELESTAR-1 UPLINK***
@@ -25,13 +25,14 @@ interface lo
 description ***LOOPBACK***
 ip address 10.16.2.1/32
 
+
+no router bgp 20001
 router bgp 20001
 neighbor 10.16.1.2 remote-as 64496
 neighbor 10.16.1.6 remote-as 64497
 neighbor 10.16.1.10 remote-as 4010
 neighbor 10.16.0.2 remote-as 20001
-address-family ipv4
+address-family ipv4 unicast
 redistribute connected
-redistribute ospf
 end
 
