@@ -24,8 +24,11 @@ router ospf
 ospf router-id 10.17.2.2
 network 10.17.0.0/30 area 0
 network 10.17.0.4/30 area 0
+redistribute bgp
+redistribute connected
 
 
+ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 
 ! BGP configuration
 no router bgp 4010
@@ -36,6 +39,8 @@ address-family ipv4 unicast
 ! Advertise networks
 network 10.10.0.0/29
 redistribute connected
+    redistribute ospf
+
 ! Apply the prefix-list for route advertisement and acceptance
 neighbor 10.10.0.3 prefix-list ALLOW_ALL in
 neighbor 10.10.0.3 prefix-list ALLOW_ALL out
@@ -44,7 +49,6 @@ neighbor 10.10.0.2 prefix-list ALLOW_ALL out
 exit-address-family
 
 ! Apply the prefix-list for BGP
-ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 
 end
 write memory

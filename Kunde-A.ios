@@ -6,10 +6,14 @@ description ***NEXTTEL-1 UPLINK***
 ip address 10.16.1.2/30
 bandwidth 1000
 
+ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 
 no router bgp 64496
 router bgp 64496
 neighbor 10.16.1.1 remote-as 20001  
 address-family ipv4 unicast
-network 10.16.1.0 mask 255.255.255.252
+
+neighbor 10.16.1.1 prefix-list ALLOW_ALL in
+neighbor 10.16.1.1 prefix-list ALLOW_ALL out
+
 end

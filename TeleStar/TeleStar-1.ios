@@ -27,18 +27,25 @@ no router ospf
 router ospf 
 ospf router-id 10.17.2.1
 network 10.17.0.0/30 area 0
-network 10.17.0.8/30 area 0
+network 10.17.0.8/30 area 
+redistribute bgp
+redistribute connected
+
+
+ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 
 ! BGP configuration
 no router bgp 4010
 router bgp 4010
  neighbor 10.17.1.2 remote-as 64497
  neighbor 10.16.1.9 remote-as 20001
+ 
  !
  address-family ipv4 unicast
   network 10.17.1.0/30
   network 10.16.1.8/30
   redistribute connected
+  redistribute ospf
   neighbor 10.17.1.2 prefix-list ALLOW_ALL in
   neighbor 10.17.1.2 prefix-list ALLOW_ALL out
   neighbor 10.16.1.9 prefix-list ALLOW_ALL in
@@ -47,20 +54,5 @@ router bgp 4010
 exit
 
 ! Prefix list configuration
-ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 !
 end
-
-! no router bgp 4010
-! router bgp 4010
-! neighbor 10.17.1.2 remote-as 64497
-! neighbor 10.16.1.9 remote-as 20001
-! ! address-family ipv4
-! neighbor 10.16.1.9 prefix-list ALLOW_ALL in
-! neighbor 10.16.1.9 prefix-list ALLOW_ALL out
-
-! network 10.17.1.0 mask 255.255.255.252
-! network 10.16.1.8 mask 255.255.255.252
-! redistribute connected
-! end
-
