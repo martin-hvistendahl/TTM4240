@@ -16,19 +16,20 @@ ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 
 no router bgp 64497
 router bgp 64497
-neighbor 10.16.1.5 remote-as 20001
 neighbor 10.17.1.1 remote 4010
+neighbor 10.16.1.5 remote-as 20001
 
 address-family ipv4 unicast
 redistribute connected
 network 10.0.10.0 mask 255.255.255.128
 network 10.0.40.0 mask 255.255.255.128
 
+neighbor 10.17.1.1 prefix-list ALLOW_ALL in
+neighbor 10.17.1.1 prefix-list ALLOW_ALL out
+
 neighbor 10.16.1.5 prefix-list ALLOW_ALL in
 neighbor 10.16.1.5 prefix-list ALLOW_ALL out
 
-neighbor 10.17.1.1 prefix-list ALLOW_ALL in
-neighbor 10.17.1.1 prefix-list ALLOW_ALL out
 
 end
 

@@ -21,9 +21,12 @@ ip address 10.17.2.2/32
 
 router ospf 
 ospf router-id 10.17.2.2
-network 10.17.0.0/30 area 0
-network 10.17.0.4/30 area 0
+no network 10.17.0.0/30 area 0
+no network 10.17.0.4/30 area 0
+network 10.17.0.0/24 area 0
+default-information originate
 redistribute bgp
+
 
 
 ip prefix-list ALLOW_ALL seq 5 deny 10.17.2.2/32

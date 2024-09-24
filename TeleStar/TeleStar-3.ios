@@ -21,9 +21,12 @@ ip address 10.17.2.3/32
 
 router ospf 
 ospf router-id 10.17.2.3
-network 10.17.0.4/30 area 0
-network 10.17.0.8/30 area 0 
+no network 10.17.0.4/30 area 0
+no network 10.17.0.8/30 area 0 
+network 10.17.0.0/24 area 0
 redistribute bgp
+default-information originate
+
 
 ip prefix-list ALLOW_ALL seq 5 deny 10.17.2.3/32
 ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
@@ -38,12 +41,6 @@ router bgp 4010
     redistribute ospf
   neighbor 10.17.1.6 prefix-list ALLOW_ALL in
   neighbor 10.17.1.6 prefix-list ALLOW_ALL out
-
-  neighbor 10.17.0.9 prefix-list ALLOW_ALL in
-  neighbor 10.17.0.9 prefix-list ALLOW_ALL out
-
-  neighbor 10.17.0.5 prefix-list ALLOW_ALL in
-  neighbor 10.17.0.5 prefix-list ALLOW_ALL out
  exit-address-family
 exit
 
