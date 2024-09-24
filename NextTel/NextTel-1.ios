@@ -28,6 +28,10 @@ ip address 10.16.2.1/32
 ip prefix-list ALLOW_ALL seq 5 deny 10.16.2.1/32
 ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
 
+ip prefix-list NEXTTEL_CUSTOMERS seq 5 permit 10.16.1.0/30
+ip prefix-list NEXTTEL_CUSTOMERS seq 10 permit 10.16.1.4/30
+
+
 no router bgp 20001
 router bgp 20001
 neighbor 10.16.1.2 remote-as 64496
@@ -42,8 +46,8 @@ neighbor 10.16.1.2 prefix-list ALLOW_ALL out
 neighbor 10.16.1.6 prefix-list ALLOW_ALL in
 neighbor 10.16.1.6 prefix-list ALLOW_ALL out
 
+neighbor 10.16.1.10 prefix-list NEXTTEL_CUSTOMERS out
 neighbor 10.16.1.10 prefix-list ALLOW_ALL in
-neighbor 10.16.1.10 prefix-list ALLOW_ALL out
 
 neighbor 10.16.0.2 prefix-list ALLOW_ALL in
 neighbor 10.16.0.2 prefix-list ALLOW_ALL out

@@ -23,16 +23,17 @@ interface lo
 description ***LOOPBACK***
 ip address 10.17.2.1/32
 
-no router ospf 
 router ospf 
 ospf router-id 10.17.2.1
 network 10.17.0.0/30 area 0
 network 10.17.0.8/30 area 0
 redistribute bgp
-redistribute connected
 
 ip prefix-list ALLOW_ALL seq 5 deny 10.17.2.1/32
 ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
+
+ip prefix-list TELESTAR_CUSTOMERS seq 5 permit 10.17.1.0/30  # Kunde-B1
+ip prefix-list TELESTAR_CUSTOMERS seq 10 permit 10.17.1.4/30 # Kunde-B2
 
 ! BGP configuration
 no router bgp 4010
@@ -46,8 +47,8 @@ router bgp 4010
   redistribute ospf
   neighbor 10.17.1.2 prefix-list ALLOW_ALL in
   neighbor 10.17.1.2 prefix-list ALLOW_ALL out
+  neighbor 10.16.1.9 prefix-list TELESTAR_CUSTOMERS out
   neighbor 10.16.1.9 prefix-list ALLOW_ALL in
-  neighbor 10.16.1.9 prefix-list ALLOW_ALL out
  exit-address-family
 exit
 

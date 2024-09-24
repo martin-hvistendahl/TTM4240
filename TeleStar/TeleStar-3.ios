@@ -19,13 +19,11 @@ int lo
 description ***LOOPBACK***
 ip address 10.17.2.3/32
 
-no router ospf 
 router ospf 
 ospf router-id 10.17.2.3
 network 10.17.0.4/30 area 0
 network 10.17.0.8/30 area 0 
 redistribute bgp
-redistribute connected
 
 ip prefix-list ALLOW_ALL seq 5 deny 10.17.2.3/32
 ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
