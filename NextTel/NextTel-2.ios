@@ -15,7 +15,8 @@ interface lo
 description ***LOOPBACK***
 ip address 10.16.2.2/32
 
-ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
+ip prefix-list ALLOW_ALL seq 5 deny 10.16.2.2/32
+ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
 
 no router bgp 20001
 router bgp 20001

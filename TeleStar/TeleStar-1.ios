@@ -27,7 +27,7 @@ no router ospf
 router ospf 
 ospf router-id 10.17.2.1
 network 10.17.0.0/30 area 0
-network 10.17.0.8/30 area 
+network 10.17.0.8/30 area 0
 redistribute bgp
 redistribute connected
 
