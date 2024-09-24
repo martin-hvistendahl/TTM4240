@@ -27,7 +27,8 @@ network 10.17.0.8/30 area 0
 redistribute bgp
 redistribute connected
 
-ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
+ip prefix-list ALLOW_ALL seq 5 deny 10.17.2.3/32
+ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
 
 ! BGP configuration
 no router bgp 4010
@@ -35,7 +36,6 @@ router bgp 4010
  neighbor 10.17.1.6 remote-as 64498
  !
  address-family ipv4 unicast
-  network 10.17.1.4/30
   redistribute connected
     redistribute ospf
   neighbor 10.17.1.6 prefix-list ALLOW_ALL in
