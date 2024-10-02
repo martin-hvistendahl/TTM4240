@@ -7,12 +7,12 @@ bandwidth 1000
 
 int eth1
 description ***TELESTAR-1 UPLINK***
-ip address 10.17.0.2/30
+ip address 10.17.0.1/31
 bandwidth 1000
 
 int eth2
 description ***TELESTAR-3 UPLINK***
-ip address 10.17.0.5/30
+ip address 10.17.0.2/31
 bandwidth 1000
 
 int lo
@@ -21,19 +21,15 @@ ip address 10.17.2.2/32
 
 router ospf 
 ospf router-id 10.17.2.2
-no network 10.17.0.0/30 area 0
-no network 10.17.0.4/30 area 0
 network 10.17.0.0/24 area 0
 default-information originate
 redistribute bgp
 
 
 
-ip prefix-list ALLOW_ALL seq 5 deny 10.17.2.2/32
-ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
+ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 30
 
 ! BGP configuration
-no router bgp 4010
 router bgp 4010
 neighbor 10.10.0.3 remote-as 3006
 neighbor 10.10.0.2 remote-as 20001

@@ -1,12 +1,12 @@
 conf t
 interface eth0
 description ***TELESTAR-3 UPLINK***
-ip address 10.17.0.9/30
+ip address 10.17.0.4/31
 bandwidth 100
 
 interface eth1
 description ***TELESTAR-2 UPLINK***
-ip address 10.17.0.1/30
+ip address 10.17.0.0/31
 bandwidth 1000
 
 interface eth2
@@ -25,15 +25,12 @@ ip address 10.17.2.1/32
 
 router ospf 
 ospf router-id 10.17.2.1
-no network 10.17.0.0/30 area 0
-no network 10.17.0.8/30 area 0
 network 10.17.0.0/24 area 0
 redistribute bgp
 default-information originate
 
 
-ip prefix-list ALLOW_ALL seq 5 deny 10.17.2.1/32
-ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
+ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 30
 
 ip prefix-list TELESTAR_CUSTOMERS seq 5 permit 10.17.1.0/30
 ip prefix-list TELESTAR_CUSTOMERS seq 10 permit 10.17.1.4/30

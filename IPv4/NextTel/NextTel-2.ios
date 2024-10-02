@@ -8,17 +8,15 @@ bandwidth 1000
 
 interface eth1
 description ***NEXTTEL-1 UPLINK***
-ip address 10.16.0.2/30
+ip address 10.16.0.1/31
 bandwidth 1000
 
 interface lo
 description ***LOOPBACK***
 ip address 10.16.2.2/32
 
-ip prefix-list ALLOW_ALL seq 5 deny 10.16.2.2/32
-ip prefix-list ALLOW_ALL seq 10 permit 0.0.0.0/0 le 32
+ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 30
 
-no router bgp 20001
 router bgp 20001
 neighbor 10.10.0.3 remote-as 3006
 neighbor 10.10.0.1 remote-as 4010
