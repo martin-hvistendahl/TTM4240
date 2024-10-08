@@ -2,7 +2,7 @@ conf termin
 interface fa0/1
 description ***NEXTTEL-1 UPLINK***
 ip address 10.17.1.6 255.255.255.252
-bandwidth 1000
+bandwidth 100
 no shut
 
 ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32

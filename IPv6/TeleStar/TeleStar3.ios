@@ -1,32 +1,46 @@
-interface Ethernet0/0
- description Link to TeleStar-1
- ipv6 address fd00:0:0:1000::5/64
- no shutdown
+conf t
+ipv6 forwarding
+int eth0
+description ***TELESTAR-1 UPLINK***
+ipv6 address fd00:0:0:1000::1:2/112
+ipv6 ospf6 area 0
+bandwidth 100
 
-interface Ethernet0/1
- description Link to Kunde-B2
- ipv6 address fd00:0:0:2000::3/64
- no shutdown
+int eth1
+description ***KUNDE-B2 UPLINK***
+ipv6 address fd00:0:0:2000::2:1/112
+bandwidth 100
 
-interface Ethernet0/2
- description Link to TeleStar-2
- ipv6 address fd00:0:0:1000::6/64
- no shutdown
+int eth2
+description ***TELESTAR-2 UPLINK***
+ipv6 address fd00:0:0:1000::3:2/112
+ipv6 ospf6 area 0
+bandwidth 1000
 
-interface Loopback0
- ipv6 address fd00:0:0:4000::3/128
- no shutdown
+int lo
+description ***LOOPBACK***
+ipv6 address fd00:0:0:4000::3/128
 
-router ospfv3 1
- router-id 3.3.3.3
- ipv6 area 0
- network fd00:0:0:1000::/64
- network fd00:0:0:2000::/64
+
+router ospf6
+ospf6 router-id 3.3.3.3
+redistribute bgp
+default-information originate
+
+ipv6 prefix-list ALLOW_ALL seq 5 permit ::/0
 
 router bgp 4010
  bgp router-id 3.3.3.3
- neighbor fd00:0:0:2000::A remote-as 64498
+ neighbor fd00:0:0:2000::2:2 remote-as 64498
  address-family ipv6
-  network fd00:0:0:1000::/64
-  network fd00:0:0:2000::/64
- exit-address-family
+  neighbor fd00:0:0:2000::2:2 activate
+  neighbor fd00:0:0:2000::2:2 prefix-list ALLOW_ALL in
+  neighbor fd00:0:0:2000::2:2 prefix-list ALLOW_ALL out
+ redistribute connected
+end
+
+
+!v
+end
+
+

@@ -1,0 +1,20 @@
+conf t
+ipv6 unicast-routing
+
+interface gi1/0
+ description ***NEXTTEL-1 UPLINK***
+ ipv6 address fd00:0:0:2000::1:2/112
+ bandwidth 1000
+ no shutdown
+
+ipv6 prefix-list ALLOW_ALL seq 5 permit ::/0
+
+router bgp 64497
+ bgp router-id 5.5.5.5
+ neighbor fd00:0:0:2000::1:1 remote-as 4010
+ address-family ipv6
+  neighbor fd00:0:0:2000::1:1 activate
+  neighbor fd00:0:0:2000::1:1 prefix-list ALLOW_ALL in
+  neighbor fd00:0:0:2000::1:1 prefix-list ALLOW_ALL out
+  redistribute connected
+end

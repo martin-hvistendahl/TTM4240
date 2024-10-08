@@ -1,32 +1,30 @@
-interface Ethernet0/0
- description Link to SW
- ipv6 address fd00:0:0:3000::1/64
- no shutdown
+conf t
+ipv6 forwarding
+int eth0
+description ***SW UPLINK***
+ipv6 address fd00:0:0:3000::1:1/112
+bandwidth 1000
 
-interface Ethernet0/1
- description Link to TeleStar-1
- ipv6 address fd00:0:0:1000::3/64
- no shutdown
+int eth1
+description ***TELESTAR-1 UPLINK***
+ipv6 address fd00:0:0:1000::2:2112
+ipv6 ospf6 area 0
+bandwidth 1000
 
-interface Ethernet0/2
- description Link to TeleStar-3
- ipv6 address fd00:0:0:1000::4/64
- no shutdown
+int eth2
+description ***TELESTAR-3 UPLINK***
+ipv6 address fd00:0:0:1000::3:1/112
+ipv6 ospf6 area 0
+bandwidth 1000
 
-interface Loopback0
- ipv6 address fd00:0:0:4000::2/128
- no shutdown
+int lo
+description ***LOOPBACK***
+ipv6 address fd00:0:0:4000::2/128
 
-router ospfv3 1
- router-id 2.2.2.2
- ipv6 area 0
- network fd00:0:0:1000::/64
- network fd00:0:0:3000::/64
 
-router bgp 4010
- bgp router-id 2.2.2.2
- neighbor fd00:0:0:3000::3 remote-as 3006
- address-family ipv6
-  network fd00:0:0:1000::/64
-  network fd00:0:0:3000::/64
- exit-address-family
+router ospf6
+ospf6 router-id 2.2.2.2
+
+end
+
+
