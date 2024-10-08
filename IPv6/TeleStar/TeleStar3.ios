@@ -1,0 +1,32 @@
+interface Ethernet0/0
+ description Link to TeleStar-1
+ ipv6 address fd00:0:0:1000::5/64
+ no shutdown
+
+interface Ethernet0/1
+ description Link to Kunde-B2
+ ipv6 address fd00:0:0:2000::3/64
+ no shutdown
+
+interface Ethernet0/2
+ description Link to TeleStar-2
+ ipv6 address fd00:0:0:1000::6/64
+ no shutdown
+
+interface Loopback0
+ ipv6 address fd00:0:0:4000::3/128
+ no shutdown
+
+router ospfv3 1
+ router-id 3.3.3.3
+ ipv6 area 0
+ network fd00:0:0:1000::/64
+ network fd00:0:0:2000::/64
+
+router bgp 4010
+ bgp router-id 3.3.3.3
+ neighbor fd00:0:0:2000::A remote-as 64498
+ address-family ipv6
+  network fd00:0:0:1000::/64
+  network fd00:0:0:2000::/64
+ exit-address-family
