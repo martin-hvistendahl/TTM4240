@@ -14,7 +14,6 @@ no shut
 
 ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 
-no router bgp 64497
 router bgp 64497
 neighbor 10.17.1.1 remote 4010
 neighbor 10.16.1.5 remote-as 20001

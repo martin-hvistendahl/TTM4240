@@ -1,0 +1,36 @@
+conf
+set interfaces loopback lo0 address 10.10.1.1/32
+set interfaces ethernet eth0 address 10.10.0.3/29
+set interfaces loopback lo1 address fd00:0:0:5000::4001/128
+set interfaces ethernet eth0 address fd00:0:0:3000::2/112
+
+set protocols bgp 3006
+set protocols bgp 3006 parameters router-id 10.10.1.1
+
+set protocols bgp 3006 neighbor 10.10.0.2 remote-as '20001'
+set protocols bgp 3006 neighbor 10.10.0.2 description 'NextTel-2'
+
+set protocols bgp 3006 neighbor 10.10.0.1 remote-as '4010'
+set protocols bgp 3006 neighbor 10.10.0.1 description 'TeleStar-2 IPv4'
+
+set protocols bgp 3006 neighbor fd00:0:0:3000::1 remote-as '4010'
+set protocols bgp 3006 neighbor fd00:0:0:3000::1 description 'TeleStar-2 IPv6'
+set protocols bgp 3006 address-family ipv4-unicast network 10.10.0.0/29
+set protocols bgp 3006 address-family ipv4-unicast network 0.0.0.0/0
+set protocols bgp 3006 address-family ipv4-unicast redistribute static
+
+set policy prefix-list NO_LOOPBACK rule 10 action 'deny'
+set policy prefix-list NO_LOOPBACK rule 10 prefix '10.10.1.1/32'
+set policy prefix-list NO_LOOPBACK rule 20 action 'permit'
+set policy prefix-list NO_LOOPBACK rule 20 prefix '0.0.0.0/0'
+
+set policy route-map BLOCK_LOOPBACK_EXPORT rule 10 action 'permit'
+set policy route-map BLOCK_LOOPBACK_EXPORT rule 10 match ip address prefix-list 'NO_LOOPBACK'
+
+set protocols bgp 3006 neighbor 10.10.0.1 address-family ipv4-unicast route-map export 'BLOCK_LOOPBACK_EXPORT'
+set protocols bgp 3006 neighbor 10.10.0.2 address-family ipv4-unicast route-map export 'BLOCK_LOOPBACK_EXPORT'
+
+set protocols static route 0.0.0.0/0 blackhole
+
+commit
+save

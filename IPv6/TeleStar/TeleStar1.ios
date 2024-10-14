@@ -10,6 +10,7 @@ interface eth1
 description ***TELESTAR-2 UPLINK***
 ipv6 address fd00:0:0:1000::2:1/112
 bandwidth 1000
+ipv6 ospf6 area 0
 
 interface eth2
 description ***KUNDE-B1 UPLINK***
@@ -30,16 +31,28 @@ ospf6 router-id 1.1.1.1
 redistribute bgp
 default-information originate
 
-ipv6 prefix-list ALLOW_ALL seq 5 permit ::/0
+
+
+ipv6 prefix-list ALLOW_ALL_IPv6 seq 5 permit ::/0 le 128
+ip prefix-list TELESTAR_CUSTOMERS seq 5 permit 10.17.1.0/30
+ip prefix-list TELESTAR_CUSTOMERS seq 10 permit 10.17.1.4/30
 
 router bgp 4010
  bgp router-id 1.1.1.1
  neighbor fd00:0:0:2000::1:2 remote-as 64497
- address-family ipv6
-  network fd00:0:0:2000::1:0/112
+ neighbor 10.16.1.9 remote-as 20001
 
+ address-family ipv6
+  ! network fd00:0:0:2000::1:0/112
   neighbor fd00:0:0:2000::1:2 activate
-  neighbor fd00:0:0:2000::1:2 prefix-list ALLOW_ALL in
-  neighbor fd00:0:0:2000::1:2 prefix-list ALLOW_ALL out
+  neighbor fd00:0:0:2000::1:2 prefix-list ALLOW_ALL_IPv6 in
+  neighbor fd00:0:0:2000::1:2 prefix-list ALLOW_ALL_IPv6 out
   redistribute connected
+  redistribute ospf
+
+ address-family ipv4 unicast
+  redistribute connected
+  neighbor 10.16.1.9 prefix-list TELESTAR_CUSTOMERS out
+  neighbor 10.16.1.9 prefix-list ALLOW_ALL in
+
 end

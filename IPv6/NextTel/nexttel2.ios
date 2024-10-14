@@ -1,0 +1,36 @@
+conf t
+hostname NextTel-2
+
+interface eth0
+description ***SW UPLINK***
+ip address 10.10.0.2/29
+bandwidth 1000
+
+interface eth1
+description ***NEXTTEL-1 UPLINK***
+ip address 10.16.0.1/31
+bandwidth 1000
+
+interface lo
+description ***LOOPBACK***
+ip address 10.16.2.2/32
+
+ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 30
+
+router bgp 20001
+neighbor 10.10.0.3 remote-as 3006
+neighbor 10.10.0.1 remote-as 4010
+neighbor 10.16.0.0 remote-as 20001
+address-family ipv4
+redistribute connected
+
+neighbor 10.10.0.3 prefix-list ALLOW_ALL in
+neighbor 10.10.0.3 prefix-list ALLOW_ALL out
+
+neighbor 10.10.0.1 prefix-list ALLOW_ALL in
+neighbor 10.10.0.1 prefix-list ALLOW_ALL out
+
+neighbor 10.16.0.0 prefix-list ALLOW_ALL in
+neighbor 10.16.0.0 prefix-list ALLOW_ALL out
+
+end

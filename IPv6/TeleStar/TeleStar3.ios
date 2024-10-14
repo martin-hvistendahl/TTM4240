@@ -27,16 +27,18 @@ ospf6 router-id 3.3.3.3
 redistribute bgp
 default-information originate
 
-ipv6 prefix-list ALLOW_ALL seq 5 permit ::/0
+ipv6 prefix-list ALLOW_ALL_IPv6 seq 5 permit ::/0 le 128
 
 router bgp 4010
  bgp router-id 3.3.3.3
  neighbor fd00:0:0:2000::2:2 remote-as 64498
  address-family ipv6
   neighbor fd00:0:0:2000::2:2 activate
-  neighbor fd00:0:0:2000::2:2 prefix-list ALLOW_ALL in
-  neighbor fd00:0:0:2000::2:2 prefix-list ALLOW_ALL out
+  neighbor fd00:0:0:2000::2:2 prefix-list ALLOW_ALL_IPv6 in
+  neighbor fd00:0:0:2000::2:2 prefix-list ALLOW_ALL_IPv6 out
  redistribute connected
+ redistribute ospf
+
 end
 
 

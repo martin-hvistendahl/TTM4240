@@ -1,20 +1,121 @@
 conf t
 ipv6 unicast-routing
-
+ipv6 enable
+ipv6 cef
 interface fa0/1
  description ***NEXTTEL-1 UPLINK***
  ipv6 address fd00:0:0:2000::2:2/112
  bandwidth 100
  no shutdown
 
-ipv6 prefix-list ALLOW_ALL seq 5 permit ::/0
+ipv6 prefix-list ALLOW_ALL_IPV6 seq 5 permit ::/0 le 128
+ip prefix-list ALLOW_ALL_IPV4 seq 5 permit 0.0.0.0/0 le 32
 
 router bgp 64498
- bgp router-id 4.4.4.4
  neighbor fd00:0:0:2000::2:1 remote-as 4010
  address-family ipv6
+  network fd00:0:0:2000::2:0/112
+
   neighbor fd00:0:0:2000::2:1 activate
-  neighbor fd00:0:0:2000::2:1 prefix-list ALLOW_ALL in
-  neighbor fd00:0:0:2000::2:1 prefix-list ALLOW_ALL out
+  neighbor fd00:0:0:2000::2:1 prefix-list ALLOW_ALL_IPV6 in
+  neighbor fd00:0:0:2000::2:1 prefix-list ALLOW_ALL_IPV6 out
   redistribute connected
-end
+address-family ipv4
+  redistribute connected
+  network 10.0.80.0 mask 255.255.255.128
+  network 10.0.100.0 mask 255.255.255.128
+
+interface tunnel 0
+ip address 10.0.0.2 255.255.255.252  
+tunnel source f0/1
+tunnel destination fd00:0:0:2000::1:2
+tunnel mode gre ipv6
+ipv6 enable
+no shut
+
+ip route 10.0.10.0 255.255.255.128 tunnel 0
+ip route 10.0.40.0 255.255.255.128 tunnel 0
+
+
+interface fa 0/0
+no shut
+
+interface fa 0/0.10
+description ***KUNDE-B1 PROD***
+encapsulation dot1Q 10
+ip address 10.0.100.1 255.255.255.128
+ip access-group RFC1918 in
+
+interface fa 0/0.40
+description ***KUNDE-B1 TEST***
+encapsulation dot1Q 40
+ip address 10.0.80.1 255.255.255.128
+ip access-group RFC1918 in
+
+! Exclude IP addresses
+ip dhcp excluded-address 10.0.100.1 10.0.100.10
+ip dhcp excluded-address 10.0.80.1 10.0.80.10
+
+! Configure DHCP for VLAN 10
+ip dhcp pool VLAN10
+ network 10.0.100.0 255.255.255.128
+ default-router 10.0.100.1
+ dns-server 8.8.8.8
+ exit
+
+! Configure DHCP for VLAN 40
+ip dhcp pool VLAN40
+ network 10.0.80.0 255.255.255.128
+ default-router 10.0.80.1
+ dns-server 8.8.8.8
+
+no ip access-list ext RFC1918
+ip access-list ext RFC1918
+10 permit ip 10.0.100.0 0.0.0.127 10.0.10.0 0.0.0.127
+20 permit ip 10.0.80.0 0.0.0.127 10.0.40.0 0.0.0.127
+30 deny ip 10.0.0.0 0.255.255.255 any
+40 deny ip 172.16.0.0 0.15.255.255 any
+50 deny ip 192.168.0.0 0.0.255.255 any
+60 permit ip any any
+
+---------------------------------------------------------------------------------------------------------------------
+hostname ews2
+
+no ip routing
+
+vlan 10
+name Prod
+vlan 40
+name Test
+
+
+
+interface vlan 10
+description ***KUNDE-B1 PROD***
+ip address 10.0.100.2 255.255.255.128
+ip helper-address 10.0.100.1
+no shut
+
+interface vlan 40
+description ***KUNDE-B1 TEST***
+ip address 10.0.80.2 255.255.255.128
+ip helper-address 10.0.80.1
+no shut
+
+interface fa1/0
+description ***KUNDE-B2 UPLINK***
+switchport mode trunk
+no shut
+
+int fa1/1
+description ***TEST VLAN***
+switchport mode access 
+switchport access vlan 10
+no shut
+
+int fa1/9
+description ***PROD VLAN***
+switchport mode access
+switchport access vlan 40
+no shut
+

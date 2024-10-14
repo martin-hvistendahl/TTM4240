@@ -8,7 +8,6 @@ bandwidth 1000
 
 ip prefix-list ALLOW_ALL seq 5 permit 0.0.0.0/0 le 32
 
-no router bgp 64496
 router bgp 64496
 neighbor 10.16.1.1 remote-as 20001  
 address-family ipv4 unicast

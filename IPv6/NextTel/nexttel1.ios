@@ -35,7 +35,7 @@ router bgp 20001
 neighbor 10.16.1.2 remote-as 64496
 neighbor 10.16.1.6 remote-as 64497
 neighbor 10.16.1.10 remote-as 4010
-neighbor 10.16.0.1 remote-as 20001
+neighbor 10.16.0.2 remote-as 20001
 address-family ipv4 unicast
 redistribute connected
 neighbor 10.16.1.2 prefix-list ALLOW_ALL in
@@ -47,8 +47,9 @@ neighbor 10.16.1.6 prefix-list ALLOW_ALL out
 neighbor 10.16.1.10 prefix-list NEXTTEL_CUSTOMERS out
 neighbor 10.16.1.10 prefix-list ALLOW_ALL in
 
-neighbor 10.16.0.1 prefix-list ALLOW_ALL in
-neighbor 10.16.0.1 prefix-list ALLOW_ALL out
+neighbor 10.16.0.2 prefix-list ALLOW_ALL in
+neighbor 10.16.0.2 prefix-list ALLOW_ALL out
+
 
 
 end
